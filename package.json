@@ -2,14 +2,13 @@
   "name": "ai-career-coach",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
+   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build && next lint --max-warnings 0 || exit 0",  
     "start": "next start",
-     "build": "next build && next lint --max-warnings 0 || exit 0",
     "lint": "next lint",
     "postinstall": "prisma generate"
-  },
+  }
   "dependencies": {
     "@clerk/nextjs": "^6.9.10",
     "@clerk/themes": "^2.2.5",
