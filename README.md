@@ -4,6 +4,9 @@
 
 ### Make sure to create a `.env` file with following variables -
 
+
+
+
 ```
 DATABASE_URL=
 
