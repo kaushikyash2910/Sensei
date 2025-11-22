@@ -3,6 +3,7 @@ import DashboardView from "./_component/dashboard-view";
 import { getUserOnboardingStatus } from "@/actions/user";
 import { redirect } from "next/navigation";
 
+
 export default async function DashboardPage() {
   const { isOnboarded } = await getUserOnboardingStatus();
 
