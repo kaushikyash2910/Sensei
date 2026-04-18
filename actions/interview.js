@@ -2,10 +2,12 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
 
 export async function generateQuiz() {
   const { userId } = await auth();
@@ -44,11 +46,26 @@ export async function generateQuiz() {
   `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.1-8b-instant",
+    });
+    
+    const text = chatCompletion.choices[0]?.message?.content || "";
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
-    const quiz = JSON.parse(cleanedText);
+    let quiz;
+
+try {
+  quiz = JSON.parse(cleanedText);
+} catch (e) {
+  const fixedText = cleanedText
+    .replace(/\n/g, " ")
+    .replace(/\r/g, " ")
+    .replace(/\t/g, " ")
+    .replace(/\\(?!["\\/bfnrtu])/g, "");
+
+  quiz = JSON.parse(fixedText);
+}
 
     return quiz.questions;
   } catch (error) {
