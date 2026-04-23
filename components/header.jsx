@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function Header() {
   
@@ -33,6 +34,8 @@ export default async function Header() {
             className="h-12 py-1 w-auto object-contain"
           />
         </Link>
+
+       
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 md:space-x-4">
@@ -84,7 +87,7 @@ export default async function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           </SignedIn>
-
+          <ThemeToggle />
           <SignedOut>
             <SignInButton>
               <Button variant="outline">Sign In</Button>

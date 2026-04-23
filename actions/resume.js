@@ -4,6 +4,7 @@ import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import Groq from "groq-sdk";
+import { incrementResumes } from "./analytics";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
