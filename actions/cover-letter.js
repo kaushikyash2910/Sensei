@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
  import Groq from "groq-sdk";
+ import { incrementCoverLetters } from "./analytics";
 
  const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -43,6 +44,7 @@ export async function generateCoverLetter(data) {
     
     Format the letter in markdown.
   `;
+  await incrementCoverLetters();
 
   try {
     const result = await groq.chat.completions.create({

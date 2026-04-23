@@ -3,6 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import Groq from "groq-sdk";
+import { incrementInterviews } from "./analytics";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -24,11 +25,9 @@ export async function generateQuiz() {
   if (!user) throw new Error("User not found");
 
   const prompt = `
-    Generate 10 technical interview questions for a ${
-      user.industry
-    } professional${
-    user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
-  }.
+    Generate 10 technical interview questions for a ${user.industry
+    } professional${user.skills?.length ? ` with expertise in ${user.skills.join(", ")}` : ""
+    }.
     
     Each question should be multiple choice with 4 options.
     
@@ -50,22 +49,22 @@ export async function generateQuiz() {
       messages: [{ role: "user", content: prompt }],
       model: "llama-3.1-8b-instant",
     });
-    
+
     const text = chatCompletion.choices[0]?.message?.content || "";
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
     let quiz;
 
-try {
-  quiz = JSON.parse(cleanedText);
-} catch (e) {
-  const fixedText = cleanedText
-    .replace(/\n/g, " ")
-    .replace(/\r/g, " ")
-    .replace(/\t/g, " ")
-    .replace(/\\(?!["\\/bfnrtu])/g, "");
+    try {
+      quiz = JSON.parse(cleanedText);
+    } catch (e) {
+      const fixedText = cleanedText
+        .replace(/\n/g, " ")
+        .replace(/\r/g, " ")
+        .replace(/\t/g, " ")
+        .replace(/\\(?!["\\/bfnrtu])/g, "");
 
-  quiz = JSON.parse(fixedText);
-}
+      quiz = JSON.parse(fixedText);
+    }
 
     return quiz.questions;
   } catch (error) {
@@ -73,6 +72,7 @@ try {
     throw new Error("Failed to generate quiz questions");
   }
 }
+ await incrementInterviews();
 
 export async function saveQuizResult(questions, answers, score) {
   const { userId } = await auth();
