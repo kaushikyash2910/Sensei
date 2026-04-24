@@ -63,6 +63,16 @@ export default async function Header() {
               </Button>
             </Link>
 
+            <Link href="/profile-analyzer">
+              <Button
+                variant="outline"
+                className="hidden md:inline-flex items-center gap-2"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Profile Analyzer
+              </Button>
+            </Link>
+
             {/* Growth Tools Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
