@@ -42,8 +42,7 @@ export async function incrementCoverLetters() {
 }
 
 // Call this whenever an interview quiz is completed
-export async function incrementInterviews() {
-  const { userId } = await auth();
+export async function incrementInterviews(userId) {
   if (!userId) return;
 
   await db.userActivity.upsert({

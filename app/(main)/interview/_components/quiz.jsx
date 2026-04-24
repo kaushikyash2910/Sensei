@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,13 @@ import { generateQuiz, saveQuizResult } from "@/actions/interview";
 import QuizResult from "./quiz-result";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
+import { incrementInterviews } from "@/actions/analytics";
 
 export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showExplanation, setShowExplanation] = useState(false);
-
+  const { user } = useUser();
   const {
     loading: generatingQuiz,
     fn: generateQuizFn,
@@ -74,7 +76,11 @@ export default function Quiz() {
     } catch (error) {
       toast.error(error.message || "Failed to save quiz results");
     }
+    if (user?.id) {
+      await incrementInterviews(user.id);
+    }
   };
+  
 
   const startNewQuiz = () => {
     setCurrentQuestion(0);
