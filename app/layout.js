@@ -37,7 +37,9 @@ export default function RootLayout({ children }) {
 
             <footer className="bg-muted/50 py-12">
               <div className="container mx-auto px-4 text-center text-gray-200">
-                <p>Made  by Yash
+                <p className="text-lg font-semibold">SENSEI — AI Career Coach</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Built by Yash Kaushik · Final Year Major Project · 2026
                 </p>
               </div>
             </footer>
