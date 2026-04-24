@@ -53,6 +53,7 @@ export default async function Header() {
               </Button>
             </Link>
 
+        {/* Skill Gap Analysis */}
             <Link href="/skill-gap">
               <Button
                 variant="outline"
@@ -62,7 +63,8 @@ export default async function Header() {
                 Skill Gap Analysis
               </Button>
             </Link>
-
+            
+        {/* Profile Analyzer */}
             <Link href="/profile-analyzer">
               <Button
                 variant="outline"
