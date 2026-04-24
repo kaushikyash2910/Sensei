@@ -75,6 +75,17 @@ export default async function Header() {
               </Button>
             </Link>
 
+        {/* Job Tracker */}
+            <Link href="/job-tracker">
+              <Button
+                variant="outline"
+                className="hidden md:inline-flex items-center gap-2"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Job Tracker
+              </Button>
+            </Link>
+
             {/* Growth Tools Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

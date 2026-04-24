@@ -91,3 +91,18 @@ model UserActivity {
 
   @@unique([userId])
 }
+model JobApplication {
+  id          String   @id @default(cuid())
+  userId      String
+  company     String
+  role        String
+  status      String   @default("Applied")   // Applied | Interview | Offer | Rejected
+  notes       String?
+  applyDate   DateTime @default(now())
+  deadline    DateTime?
+  jobUrl      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
