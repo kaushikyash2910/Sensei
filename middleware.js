@@ -4,9 +4,12 @@ import { NextResponse } from "next/server";
 const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/resume(.*)",
-  "/interview(.*)",
   "/ai-cover-letter(.*)",
+  "/interview(.*)",
   "/onboarding(.*)",
+  "/skill-gap(.*)",        
+  "/profile-analyzer(.*)", 
+  "/job-tracker(.*)",       
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
