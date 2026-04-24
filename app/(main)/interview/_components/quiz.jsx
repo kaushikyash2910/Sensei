@@ -18,6 +18,8 @@ import QuizResult from "./quiz-result";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
 import { incrementInterviews } from "@/actions/analytics";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnswerFeedback } from "./answer-feedback";
 
 export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -128,56 +130,75 @@ export default function Quiz() {
 
   return (
     <Card className="mx-2">
-      <CardHeader>
-        <CardTitle>
-          Question {currentQuestion + 1} of {quizData.length}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-lg font-medium">{question.question}</p>
-        <RadioGroup
-          onValueChange={handleAnswer}
-          value={answers[currentQuestion]}
-          className="space-y-2"
-        >
-          {question.options.map((option, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={`option-${index}`} />
-              <Label htmlFor={`option-${index}`}>{option}</Label>
-            </div>
-          ))}
-        </RadioGroup>
+    <CardHeader>
+      <CardTitle>
+        Question {currentQuestion + 1} of {quizData.length}
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
 
-        {showExplanation && (
-          <div className="mt-4 p-4 bg-muted rounded-lg">
-            <p className="font-medium">Explanation:</p>
-            <p className="text-muted-foreground">{question.explanation}</p>
-          </div>
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        {!showExplanation && (
-          <Button
-            onClick={() => setShowExplanation(true)}
-            variant="outline"
-            disabled={!answers[currentQuestion]}
+      <Tabs defaultValue="mcq">
+        <TabsList className="mb-4 w-full">
+          <TabsTrigger value="mcq" className="flex-1">Multiple Choice</TabsTrigger>
+          <TabsTrigger value="answer" className="flex-1">Type / Speak Answer</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="mcq">
+          <p className="text-lg font-medium">{question.question}</p>
+          <RadioGroup
+            onValueChange={handleAnswer}
+            value={answers[currentQuestion]}
+            className="space-y-2"
           >
-            Show Explanation
-          </Button>
-        )}
-        <Button
-          onClick={handleNext}
-          disabled={!answers[currentQuestion] || savingResult}
-          className="ml-auto"
-        >
-          {savingResult && (
-            <BarLoader className="mt-4" width={"100%"} color="gray" />
+            {question.options.map((option, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <RadioGroupItem value={option} id={`option-${index}`} />
+                <Label htmlFor={`option-${index}`}>{option}</Label>
+              </div>
+            ))}
+          </RadioGroup>
+
+          {showExplanation && (
+            <div className="mt-4 p-4 bg-muted rounded-lg">
+              <p className="font-medium">Explanation:</p>
+              <p className="text-muted-foreground">{question.explanation}</p>
+            </div>
           )}
-          {currentQuestion < quizData.length - 1
-            ? "Next Question"
-            : "Finish Quiz"}
+        </TabsContent>
+
+        <TabsContent value="answer">
+          <AnswerFeedback
+            question={question.question}
+            industry={user?.publicMetadata?.industry}
+          />
+        </TabsContent>
+
+      </Tabs>
+
+    </CardContent>
+    <CardFooter className="flex justify-between">
+      {!showExplanation && (
+        <Button
+          onClick={() => setShowExplanation(true)}
+          variant="outline"
+          disabled={!answers[currentQuestion]}
+        >
+          Show Explanation
         </Button>
-      </CardFooter>
-    </Card>
+      )}
+      <Button
+        onClick={handleNext}
+        disabled={!answers[currentQuestion] || savingResult}
+        className="ml-auto"
+      >
+        {savingResult && (
+          <BarLoader className="mt-4" width={"100%"} color="gray" />
+        )}
+        {currentQuestion < quizData.length - 1
+          ? "Next Question"
+          : "Finish Quiz"}
+      </Button>
+    </CardFooter>
+  </Card>
   );
 }
