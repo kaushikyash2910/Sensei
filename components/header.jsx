@@ -7,6 +7,10 @@ import {
   GraduationCap,
   ChevronDown,
   StarsIcon,
+  Search,
+  User,
+  Briefcase,
+  BriefcaseIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -20,8 +24,6 @@ import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function Header() {
-  
-
   return (
     <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -34,8 +36,6 @@ export default async function Header() {
             className="h-12 py-1 w-auto object-contain"
           />
         </Link>
-
-       
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 md:space-x-4">
@@ -53,38 +53,42 @@ export default async function Header() {
               </Button>
             </Link>
 
-        {/* Skill Gap Analysis */}
-            <Link href="/skill-gap">
-              <Button
-                variant="outline"
-                className="hidden md:inline-flex items-center gap-2"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Skill Gap Analysis
-              </Button>
-            </Link>
-            
-        {/* Profile Analyzer */}
-            <Link href="/profile-analyzer">
-              <Button
-                variant="outline"
-                className="hidden md:inline-flex items-center gap-2"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Profile Analyzer
-              </Button>
-            </Link>
-
-        {/* Job Tracker */}
-            <Link href="/job-tracker">
-              <Button
-                variant="outline"
-                className="hidden md:inline-flex items-center gap-2"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Job Tracker
-              </Button>
-            </Link>
+            {/* Career Tools Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="hidden md:flex items-center gap-2"
+                >
+                  <BriefcaseIcon className="h-4 w-4" />
+                  <span>Career Tools</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link href="/skill-gap" className="flex items-center gap-2">
+                    <Search className="h-4 w-4" />
+                    Skill Gap Analysis
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/profile-analyzer"
+                    className="flex items-center gap-2"
+                  >
+                    <User className="h-4 w-4" />
+                    Profile Analyzer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/job-tracker" className="flex items-center gap-2">
+                    <Briefcase className="h-4 w-4" />
+                    Job Tracker
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Growth Tools Dropdown */}
             <DropdownMenu>

@@ -72,7 +72,7 @@ export function KanbanBoard({ initialJobs }) {
                         <p className="text-xs text-muted-foreground truncate">{job.role}</p>
                         {job.deadline && (
                           <p className="text-xs text-orange-500 mt-1">
-                            Deadline: {new Date(job.deadline).toLocaleDateString()}
+                           Deadline: {new Date(job.deadline).toLocaleDateString("en-GB")}
                           </p>
                         )}
                         {job.notes && (
