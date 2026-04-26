@@ -36,7 +36,7 @@ export default function LandingPage() {
           <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">
             Powerful Features for Your Career Growth
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {features.map((feature, index) => (
               <Card
                 key={index}
@@ -87,11 +87,11 @@ export default function LandingPage() {
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>
             <p className="text-muted-foreground">
-              Four simple steps to accelerate your career growth
+              Six simple steps to accelerate your career growth
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {howItWorks.map((item, index) => (
               <div
                 key={index}
