@@ -11,6 +11,12 @@ import {
   User,
   Briefcase,
   BriefcaseIcon,
+  FileSearch,
+  Mail,
+  Linkedin,
+  HelpCircle,
+  Map,
+  DollarSign,
 } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -85,6 +91,73 @@ export default async function Header() {
                   <Link href="/job-tracker" className="flex items-center gap-2">
                     <Briefcase className="h-4 w-4" />
                     Job Tracker
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* AI Tools Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="hidden md:flex items-center gap-2"
+                >
+                  <StarsIcon className="h-4 w-4" />
+                  <span>AI Tools</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/resume-score"
+                    className="flex items-center gap-2"
+                  >
+                    <FileSearch className="h-4 w-4" />
+                    Resume Score Checker
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/cold-email" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Cold Email Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/linkedin-headline"
+                    className="flex items-center gap-2"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                    LinkedIn Headline Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/interview-questions"
+                    className="flex items-center gap-2"
+                  >
+                    <HelpCircle className="h-4 w-4" />
+                    Interview Question Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/career-roadmap"
+                    className="flex items-center gap-2"
+                  >
+                    <Map className="h-4 w-4" />
+                    Career Roadmap
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/salary-negotiation"
+                    className="flex items-center gap-2"
+                  >
+                    <DollarSign className="h-4 w-4" />
+                    Salary Negotiation Script
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

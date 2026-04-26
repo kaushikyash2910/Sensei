@@ -9,7 +9,11 @@ const nextConfig = {
     ],
   },
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Ignores ESLint errors during production builds
+    ignoreDuringBuilds: true,
+  },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
   },
 };
 
