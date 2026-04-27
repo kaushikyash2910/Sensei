@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { recommendTechStack } from "@/actions/tech-stack";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,20 +9,26 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const demandColor = {
   High: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  Medium:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
   Low: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
 };
 
 const curveColor = {
   Easy: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
-  Medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  Medium:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
   Hard: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
 };
 
@@ -34,8 +40,12 @@ function TechItem({ item }) {
         <p className="text-xs text-muted-foreground">{item.reason}</p>
       </div>
       <div className="flex gap-1 ml-2 shrink-0">
-        <Badge className={curveColor[item.learningCurve]}>{item.learningCurve}</Badge>
-        <Badge className={demandColor[item.jobDemand]}>{item.jobDemand} demand</Badge>
+        <Badge className={curveColor[item.learningCurve]}>
+          {item.learningCurve}
+        </Badge>
+        <Badge className={demandColor[item.jobDemand]}>
+          {item.jobDemand} demand
+        </Badge>
       </div>
     </div>
   );
@@ -43,10 +53,22 @@ function TechItem({ item }) {
 
 export function StackForm() {
   const [form, setForm] = useState({
-    projectIdea: "", projectType: "Web App", experience: "Intermediate", budget: "Low/Free", timeline: "3 months",
+    projectIdea: "",
+    projectType: "Web App",
+    experience: "Intermediate",
+    budget: "Low/Free",
+    timeline: "3 months",
   });
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!form.projectIdea.trim()) return;
+    const timeout = setTimeout(() => {
+      handleRecommend();
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [form.projectType, form.experience, form.budget, form.timeline]);
 
   const handleRecommend = async () => {
     if (!form.projectIdea) {
@@ -71,7 +93,9 @@ export function StackForm() {
         <Textarea
           placeholder="e.g. An AI-powered job portal where recruiters post jobs and candidates apply with AI-matched resumes..."
           value={form.projectIdea}
-          onChange={(e) => setForm((f) => ({ ...f, projectIdea: e.target.value }))}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, projectIdea: e.target.value }))
+          }
           className="min-h-[100px]"
         />
       </div>
@@ -79,8 +103,13 @@ export function StackForm() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-1">
           <Label>Project Type</Label>
-          <Select value={form.projectType} onValueChange={(v) => setForm((f) => ({ ...f, projectType: v }))}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Select
+            value={form.projectType}
+            onValueChange={(v) => setForm((f) => ({ ...f, projectType: v }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="Web App">Web App</SelectItem>
               <SelectItem value="Mobile App">Mobile App</SelectItem>
@@ -94,8 +123,13 @@ export function StackForm() {
 
         <div className="space-y-1">
           <Label>Your Experience Level</Label>
-          <Select value={form.experience} onValueChange={(v) => setForm((f) => ({ ...f, experience: v }))}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Select
+            value={form.experience}
+            onValueChange={(v) => setForm((f) => ({ ...f, experience: v }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="Beginner">Beginner</SelectItem>
               <SelectItem value="Intermediate">Intermediate</SelectItem>
@@ -106,11 +140,18 @@ export function StackForm() {
 
         <div className="space-y-1">
           <Label>Budget</Label>
-          <Select value={form.budget} onValueChange={(v) => setForm((f) => ({ ...f, budget: v }))}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Select
+            value={form.budget}
+            onValueChange={(v) => setForm((f) => ({ ...f, budget: v }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="Low/Free">Low / Free</SelectItem>
-              <SelectItem value="Medium ($50-200/mo)">Medium ($50-200/mo)</SelectItem>
+              <SelectItem value="Medium ($50-200/mo)">
+                Medium ($50-200/mo)
+              </SelectItem>
               <SelectItem value="High (No limit)">High (No limit)</SelectItem>
             </SelectContent>
           </Select>
@@ -118,8 +159,13 @@ export function StackForm() {
 
         <div className="space-y-1">
           <Label>Timeline</Label>
-          <Select value={form.timeline} onValueChange={(v) => setForm((f) => ({ ...f, timeline: v }))}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Select
+            value={form.timeline}
+            onValueChange={(v) => setForm((f) => ({ ...f, timeline: v }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="2 weeks">2 weeks (hackathon)</SelectItem>
               <SelectItem value="1 month">1 month</SelectItem>
@@ -130,8 +176,22 @@ export function StackForm() {
         </div>
       </div>
 
+      {results && (
+        <p className="text-xs text-center text-muted-foreground">
+          ✨ Results update automatically when you change your preferences
+        </p>
+      )}
       <Button onClick={handleRecommend} disabled={loading} className="w-full">
-        {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Analyzing...</> : "Recommend Tech Stack"}
+        {loading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Updating recommendations...
+          </>
+        ) : results ? (
+          "Regenerate Recommendations"
+        ) : (
+          "Recommend Tech Stack"
+        )}
       </Button>
 
       {results && (
@@ -140,7 +200,9 @@ export function StackForm() {
             <CardContent className="pt-6">
               <p className="text-xl font-bold mb-1">{results.stackName}</p>
               <p className="text-sm text-muted-foreground">{results.summary}</p>
-              <p className="text-sm mt-2 text-primary font-medium">⏱ {results.estimatedLearningTime}</p>
+              <p className="text-sm mt-2 text-primary font-medium">
+                ⏱ {results.estimatedLearningTime}
+              </p>
             </CardContent>
           </Card>
 
@@ -149,18 +211,30 @@ export function StackForm() {
             { label: "Backend", items: results.backend },
             { label: "Database", items: results.database },
             { label: "DevOps / Deployment", items: results.devops },
-          ].map(({ label, items }) => items?.length > 0 && (
-            <Card key={label}>
-              <CardHeader className="pb-2"><CardTitle className="text-sm">{label}</CardTitle></CardHeader>
-              <CardContent className="space-y-2">
-                {items.map((item, i) => <TechItem key={i} item={item} />)}
-              </CardContent>
-            </Card>
-          ))}
+          ].map(
+            ({ label, items }) =>
+              items?.length > 0 && (
+                <Card key={label}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">{label}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {items.map((item, i) => (
+                      <TechItem key={i} item={item} />
+                    ))}
+                  </CardContent>
+                </Card>
+              )
+          )}
 
           <div className="grid md:grid-cols-2 gap-4">
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" />Pros</CardTitle></CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  Pros
+                </CardTitle>
+              </CardHeader>
               <CardContent className="space-y-1">
                 {results.pros.map((p, i) => (
                   <div key={i} className="flex gap-2 text-sm">
@@ -171,7 +245,12 @@ export function StackForm() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><XCircle className="h-4 w-4 text-red-500" />Cons</CardTitle></CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <XCircle className="h-4 w-4 text-red-500" />
+                  Cons
+                </CardTitle>
+              </CardHeader>
               <CardContent className="space-y-1">
                 {results.cons.map((c, i) => (
                   <div key={i} className="flex gap-2 text-sm">
@@ -184,10 +263,16 @@ export function StackForm() {
           </div>
 
           <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-sm">🔄 Alternatives to Consider</CardTitle></CardHeader>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">
+                🔄 Alternatives to Consider
+              </CardTitle>
+            </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               {results.alternatives.map((alt) => (
-                <Badge key={alt} variant="outline">{alt}</Badge>
+                <Badge key={alt} variant="outline">
+                  {alt}
+                </Badge>
               ))}
             </CardContent>
           </Card>
