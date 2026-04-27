@@ -7,9 +7,14 @@ const isProtectedRoute = createRouteMatcher([
   "/ai-cover-letter(.*)",
   "/interview(.*)",
   "/onboarding(.*)",
-  "/skill-gap(.*)",        
-  "/profile-analyzer(.*)", 
-  "/job-tracker(.*)",       
+  "/skill-gap(.*)",
+  "/profile-analyzer(.*)",
+  "/job-tracker(.*)",
+  "/resume-compare(.*)",
+  "/career-goals(.*)",
+  "/hr-interview(.*)",
+  "/readme-generator(.*)",
+  "/tech-stack(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

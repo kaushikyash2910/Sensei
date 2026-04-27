@@ -13,10 +13,15 @@ import {
   BriefcaseIcon,
   FileSearch,
   Mail,
-  Linkedin,
   HelpCircle,
   Map,
   DollarSign,
+  Github,
+  Layers,
+  GitCompare,
+  Target,
+  MessageCircle,
+  Linkedin,
 } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -71,7 +76,7 @@ export default async function Header() {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuItem asChild>
                   <Link href="/skill-gap" className="flex items-center gap-2">
                     <Search className="h-4 w-4" />
@@ -91,6 +96,24 @@ export default async function Header() {
                   <Link href="/job-tracker" className="flex items-center gap-2">
                     <Briefcase className="h-4 w-4" />
                     Job Tracker
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/resume-compare"
+                    className="flex items-center gap-2"
+                  >
+                    <GitCompare className="h-4 w-4" />
+                    Resume Comparison
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/career-goals"
+                    className="flex items-center gap-2"
+                  >
+                    <Target className="h-4 w-4" />
+                    Weekly Career Goals
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -160,6 +183,21 @@ export default async function Header() {
                     Salary Negotiation Script
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/readme-generator"
+                    className="flex items-center gap-2"
+                  >
+                    <Github className="h-4 w-4" />
+                    GitHub README Generator
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/tech-stack" className="flex items-center gap-2">
+                    <Layers className="h-4 w-4" />
+                    Tech Stack Recommender
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -192,6 +230,15 @@ export default async function Header() {
                   <Link href="/interview" className="flex items-center gap-2">
                     <GraduationCap className="h-4 w-4" />
                     Interview Prep
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/hr-interview"
+                    className="flex items-center gap-2"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Mock HR Interview
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
