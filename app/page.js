@@ -180,6 +180,13 @@ export default function LandingPage() {
                 </AccordionItem>
               ))}
             </Accordion>
+            <div className="text-center mt-8">
+              <Link href="/faq">
+                <Button variant="outline">
+                  See all FAQs ({30}+ questions) →
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

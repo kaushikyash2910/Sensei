@@ -1,47 +1,27 @@
 export const faqs = [
   {
-    question: "What makes Sensei unique as a career development tool?",
+    question: "What is Sensei and what can it do?",
     answer:
-      "Sensei combines 12+ AI-powered career tools with industry-specific insights. From resume building and ATS scoring to skill gap analysis, job tracking, cold email generation, salary negotiation scripts, and career roadmaps — everything you need to land your dream job is in one place.",
+      "Sensei is an all-in-one AI-powered career coaching platform with 20+ tools — resume building, ATS scoring, mock interviews, skill gap analysis, job tracking, cold email generation, salary negotiation scripts, career roadmaps, and much more. Everything you need to land your dream job in one place.",
   },
   {
-    question: "How does Sensei create tailored content?",
+    question: "How does the Resume ATS Score Checker work?",
     answer:
-      "Sensei learns about your industry, experience, and skills during onboarding. It then uses this information to generate customized resumes, cover letters, interview questions, and career roadmaps. All content is specifically aligned with your professional background.",
+      "Upload your resume as a PDF or paste the text. Sensei gives you an ATS score out of 100 with a detailed breakdown of formatting, keywords, experience, and quick wins to improve your score.",
   },
   {
-    question: "How accurate and up-to-date are Sensei's industry insights?",
+    question: "What is the Mock HR Interview Simulator?",
     answer:
-      "We update our industry insights weekly using advanced AI analysis of current market trends. This includes salary data, in-demand skills, and industry growth patterns. Our system constantly evolves to ensure you have the most relevant information for your career decisions.",
-  },
-  {
-    question: "Is my data secure with Sensei?",
-    answer:
-      "Absolutely. We prioritize the security of your professional information. All data is encrypted and securely stored using industry-standard practices. We use Clerk for authentication and never share your personal information with third parties.",
+      "A full conversational mock interview where AI acts as a real HR interviewer. It asks 5 questions, gives live feedback after each answer, and provides a final score with strengths and areas to improve.",
   },
   {
     question: "How does the Skill Gap Analyzer work?",
     answer:
-      "Simply paste any job description into the Skill Gap Analyzer. Sensei's AI compares it against your profile and skills, then tells you exactly which skills you're missing — along with a personalized learning plan with resources and timeframes to build each skill.",
+      "Paste any job description and Sensei compares it against your profile skills. You get a match score, skills you already have, skills you're missing, and a personalized learning plan with resources and timeframes.",
   },
   {
-    question: "What is the Resume ATS Score Checker?",
+    question: "Is my data secure with Sensei?",
     answer:
-      "The ATS Score Checker analyzes your resume against Applicant Tracking Systems used by recruiters. You can upload a PDF or paste your resume text, and Sensei gives you a score out of 100 with a detailed breakdown of formatting, keywords, experience, and quick wins to improve your score.",
-  },
-  {
-    question: "How does the Job Tracker work?",
-    answer:
-      "The Job Tracker is a Kanban-style board where you can add every job you apply to and move it across columns — Applied, Interview, Offer, and Rejected. You can add notes, deadlines, and job URLs to stay organized throughout your entire job search.",
-  },
-  {
-    question: "Can I generate interview questions for any job?",
-    answer:
-      "Yes! The Interview Question Generator lets you paste any job description and generates the top 10 most likely interview questions with category labels, difficulty ratings, how-to-answer tips, key points, and a full model answer for each question. You can also download all questions as a PDF.",
-  },
-  {
-    question: "Can I edit the AI-generated content?",
-    answer:
-      "Yes! While Sensei generates high-quality initial content, you have full control to edit and customize all generated resumes, cover letters, and other content. Our markdown editor makes it easy to refine the content to perfectly match your needs.",
+      "Yes. We use Clerk for authentication with industry-standard encryption. Your data is stored securely and never shared with third parties.",
   },
 ];
