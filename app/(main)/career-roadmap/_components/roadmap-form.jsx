@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateCareerRoadmap } from "@/actions/career-roadmap";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,17 +8,41 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Loader2, CheckCircle, Target } from "lucide-react";
 import { toast } from "sonner";
 
 export function RoadmapForm() {
   const [form, setForm] = useState({
-    currentRole: "", targetRole: "", currentSkills: "", timeframe: "12 months",
+    currentRole: "",
+    targetRole: "",
+    currentSkills: "",
+    timeframe: "12 months",
   });
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const STORAGE_KEY = "sensei_career_roadmap";
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const { results: r, form: f } = JSON.parse(saved);
+      setResults(r);
+      setForm(f);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (results) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ results, form }));
+    }
+  }, [results]);
 
   const handleGenerate = async () => {
     if (!form.currentRole || !form.targetRole) {
@@ -40,23 +64,42 @@ export function RoadmapForm() {
     <div className="space-y-6">
       <div className="grid md:grid-cols-2 gap-4">
         {[
-          { label: "Current Role *", key: "currentRole", placeholder: "e.g. CS Student / Junior Developer" },
-          { label: "Target Role *", key: "targetRole", placeholder: "e.g. Senior Full Stack Engineer" },
-          { label: "Current Skills", key: "currentSkills", placeholder: "e.g. HTML, CSS, JavaScript, React" },
+          {
+            label: "Current Role *",
+            key: "currentRole",
+            placeholder: "e.g. CS Student / Junior Developer",
+          },
+          {
+            label: "Target Role *",
+            key: "targetRole",
+            placeholder: "e.g. Senior Full Stack Engineer",
+          },
+          {
+            label: "Current Skills",
+            key: "currentSkills",
+            placeholder: "e.g. HTML, CSS, JavaScript, React",
+          },
         ].map(({ label, key, placeholder }) => (
           <div key={key} className="space-y-1">
             <Label>{label}</Label>
             <Input
               placeholder={placeholder}
               value={form[key]}
-              onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, [key]: e.target.value }))
+              }
             />
           </div>
         ))}
         <div className="space-y-1">
           <Label>Timeframe</Label>
-          <Select value={form.timeframe} onValueChange={(v) => setForm((f) => ({ ...f, timeframe: v }))}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+          <Select
+            value={form.timeframe}
+            onValueChange={(v) => setForm((f) => ({ ...f, timeframe: v }))}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="3 months">3 months</SelectItem>
               <SelectItem value="6 months">6 months</SelectItem>
@@ -67,12 +110,36 @@ export function RoadmapForm() {
         </div>
       </div>
 
-      <Button onClick={handleGenerate} disabled={loading} className="w-full">
-        {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Building Roadmap...</> : "Generate Career Roadmap"}
-      </Button>
+      <div className="flex gap-2">
+        <Button onClick={handleGenerate} disabled={loading} className="flex-1">
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Building Roadmap...
+            </>
+          ) : (
+            "Generate Career Roadmap"
+          )}
+        </Button>
+        {results && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              setResults(null);
+              localStorage.removeItem(STORAGE_KEY);
+            }}
+          >
+            Clear
+          </Button>
+        )}
+      </div>
 
-      {results && (
-        <div className="space-y-5 mt-4">
+  {results && (
+    <>
+      <p className="text-xs text-muted-foreground text-center">
+        ✓ Showing your last saved result — click Generate to refresh
+      </p>
+      <div className="space-y-5 mt-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-xl">{results.title}</h3>
             <Badge variant="outline">⏱ {results.totalDuration}</Badge>
@@ -81,8 +148,12 @@ export function RoadmapForm() {
           {/* Salary */}
           <Card className="border-green-200 dark:border-green-800">
             <CardContent className="pt-4">
-              <p className="text-sm text-muted-foreground">Expected Salary at Target Role</p>
-              <p className="text-xl font-bold text-green-600 dark:text-green-400">{results.salaryExpectation}</p>
+              <p className="text-sm text-muted-foreground">
+                Expected Salary at Target Role
+              </p>
+              <p className="text-xl font-bold text-green-600 dark:text-green-400">
+                {results.salaryExpectation}
+              </p>
             </CardContent>
           </Card>
 
@@ -91,12 +162,18 @@ export function RoadmapForm() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" /> Skills You Have
+                  <CheckCircle className="h-4 w-4 text-green-500" /> Skills You
+                  Have
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {results.skillsYouHave.map((s) => (
-                  <Badge key={s} className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">{s}</Badge>
+                  <Badge
+                    key={s}
+                    className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  >
+                    {s}
+                  </Badge>
                 ))}
               </CardContent>
             </Card>
@@ -108,7 +185,12 @@ export function RoadmapForm() {
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {results.skillsToLearn.map((s) => (
-                  <Badge key={s} className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">{s}</Badge>
+                  <Badge
+                    key={s}
+                    className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  >
+                    {s}
+                  </Badge>
                 ))}
               </CardContent>
             </Card>
@@ -131,22 +213,32 @@ export function RoadmapForm() {
                   <div>
                     <p className="text-xs font-semibold mb-1">Tasks:</p>
                     {phase.tasks.map((task, i) => (
-                      <div key={i} className="flex gap-2 text-sm text-muted-foreground">
-                        <span>•</span><span>{task}</span>
+                      <div
+                        key={i}
+                        className="flex gap-2 text-sm text-muted-foreground"
+                      >
+                        <span>•</span>
+                        <span>{task}</span>
                       </div>
                     ))}
                   </div>
                   <div>
                     <p className="text-xs font-semibold mb-1">Resources:</p>
                     {phase.resources.map((res, i) => (
-                      <div key={i} className="flex gap-2 text-sm text-muted-foreground">
-                        <span>📚</span><span>{res}</span>
+                      <div
+                        key={i}
+                        className="flex gap-2 text-sm text-muted-foreground"
+                      >
+                        <span>📚</span>
+                        <span>{res}</span>
                       </div>
                     ))}
                   </div>
                   <div className="bg-muted rounded-lg p-3 mt-2">
                     <p className="text-xs font-semibold">🏁 Milestone:</p>
-                    <p className="text-sm text-muted-foreground">{phase.milestone}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {phase.milestone}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -161,6 +253,8 @@ export function RoadmapForm() {
             </CardContent>
           </Card>
         </div>
+          
+        </>
       )}
     </div>
   );
