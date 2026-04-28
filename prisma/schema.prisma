@@ -106,3 +106,18 @@ model JobApplication {
 
   @@index([userId])
 }
+model CareerGoal {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  category    String    @default("General")
+  priority    String    @default("Medium")
+  notes       String?
+  completed   Boolean   @default(false)
+  archived    Boolean   @default(false)
+  weekNumber  Int       @default(0)
+  dueDate     DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+}
