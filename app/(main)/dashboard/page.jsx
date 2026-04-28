@@ -93,9 +93,7 @@ export default async function DashboardPage() {
         </div>
 
         <ToolSection title="🔍 Career Tools" tools={careerTools} cols={3} />
-        <ToolSection title="🤖 AI Tools" tools={aiTools} cols={3} />
         <ToolSection title="🎤 Interview Tools" tools={interviewTools} cols={4} />
-        <ToolSection title="🚀 Growth Tools" tools={growthTools} cols={3} />
       </div>
 
       {/* Industry Insights */}
