@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Send, RotateCcw } from "lucide-react";
+import { Loader2, Send, RotateCcw, Mic, MicOff } from "lucide-react";
 import { toast } from "sonner";
 
 export function InterviewSimulator() {
@@ -21,6 +21,8 @@ export function InterviewSimulator() {
   const [isComplete, setIsComplete] = useState(false);
   const [finalResult, setFinalResult] = useState(null);
   const chatEndRef = useRef(null);
+const recognitionRef = useRef(null);
+const [listening, setListening] = useState(false);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,7 +42,44 @@ export function InterviewSimulator() {
       setLoading(false);
     }
   };
-
+  const toggleVoice = () => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+      toast.error("Voice input not supported in this browser. Try Chrome.");
+      return;
+    }
+  
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+  
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+  
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((r) => r[0].transcript)
+        .join("");
+      setUserInput(transcript);
+    };
+  
+    recognition.onerror = () => {
+      setListening(false);
+      toast.error("Voice input error. Please try again.");
+    };
+  
+    recognition.onend = () => setListening(false);
+  
+    recognitionRef.current = recognition;
+    recognition.start();
+    setListening(true);
+  };
+  
   const handleSend = async () => {
     if (!userInput.trim()) return;
     const newHistory = [...history, { role: "candidate", message: userInput }];
@@ -196,25 +235,66 @@ export function InterviewSimulator() {
       )}
 
       {/* Input */}
-      {!isComplete && (
-        <div className="flex gap-2">
-          <Textarea
-            placeholder="Type your answer here..."
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            className="min-h-[80px] resize-none"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && e.metaKey) handleSend();
-            }}
-          />
-          <Button onClick={handleSend} disabled={loading || !userInput.trim()} className="shrink-0">
-            <Send className="h-4 w-4" />
-          </Button>
+{!isComplete && (
+  <div className="space-y-2">
+    <div className="relative">
+      <Textarea
+        placeholder="Type your answer here or click the mic to speak..."
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        className="min-h-[80px] resize-none pr-12"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.metaKey) handleSend();
+        }}
+      />
+      {/* Mic button inside textarea */}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={toggleVoice}
+        className={`absolute top-2 right-2 ${
+          listening
+            ? "text-red-500 hover:text-red-600"
+            : "text-muted-foreground hover:text-primary"
+        }`}
+      >
+        {listening ? (
+          <MicOff className="h-4 w-4" />
+        ) : (
+          <Mic className="h-4 w-4" />
+        )}
+      </Button>
+    </div>
+
+    {/* Listening indicator */}
+    {listening && (
+      <div className="flex items-center gap-2">
+        <div className="flex gap-1">
+          <span className="w-1.5 h-4 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+          <span className="w-1.5 h-4 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+          <span className="w-1.5 h-4 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
         </div>
-      )}
-      {!isComplete && (
-        <p className="text-xs text-muted-foreground text-right">Press Cmd+Enter to send</p>
-      )}
+        <p className="text-xs text-red-500 font-medium animate-pulse">
+          🎙 Listening... speak your answer, click mic to stop
+        </p>
+      </div>
+    )}
+
+    <div className="flex items-center justify-between">
+      <p className="text-xs text-muted-foreground">
+        🎙 Click mic to speak · Cmd+Enter to send
+      </p>
+      <Button
+        onClick={handleSend}
+        disabled={loading || !userInput.trim()}
+      >
+        <Send className="h-4 w-4 mr-2" />
+        Send Answer
+      </Button>
+    </div>
+  </div>
+)}
     </div>
   );
 }
