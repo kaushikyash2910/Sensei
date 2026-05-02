@@ -121,3 +121,14 @@ model CareerGoal {
 
   @@index([userId])
 }
+model TechHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  feature     String
+  inputSummary String
+  result      Json
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, feature])
+}

@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
@@ -21,22 +20,32 @@ const isProtectedRoute = createRouteMatcher([
   "/dsa-planner(.*)",
   "/system-design(.*)",
   "/coding-explainer(.*)",
+  "/resume-score(.*)",
+  "/cold-email(.*)",
+  "/linkedin-headline(.*)",
+  "/interview-questions(.*)",
+  "/career-roadmap(.*)",
+  "/salary-negotiation(.*)",
+  "/profile-analyzer(.*)",
+  "/job-tracker(.*)",
+  "/tech-history(.*)",
+  "/code-review(.*)",
+  "/pattern-helper(.*)",
+  "/mock-coding(.*)",
+  "/design-quiz(.*)",
+  "/architecture-explainer(.*)",
+  "/concept-explainer(.*)",
+  "/code-converter(.*)",
+  "/query-optimizer(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
-
-  if (!userId && isProtectedRoute(req)) {
-    const { redirectToSignIn } = await auth();
-    return redirectToSignIn();
-  }
-
-  return NextResponse.next();
+  if (isProtectedRoute(req)) await auth.protect();
 });
 
 export const config = {
   matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico)).*)",
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|_next/static|_next/image|favicon.ico)).*)",
     "/(api|trpc)(.*)",
   ],
 };

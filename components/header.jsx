@@ -27,6 +27,10 @@ import {
   Code2,
   BookOpen,
   Users,
+  Lightbulb, 
+  ArrowRight, 
+  Database, 
+  History,
 } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -236,7 +240,7 @@ export default async function Header() {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
                   <Link href="/dsa-planner" className="flex items-center gap-2">
                     <BookOpen className="h-4 w-4" />
@@ -259,6 +263,78 @@ export default async function Header() {
                   >
                     <Code2 className="h-4 w-4" />
                     Coding Challenge Explainer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/code-review" className="flex items-center gap-2">
+                    <FileSearch className="h-4 w-4" />
+                    Code Review & Optimizer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/pattern-helper"
+                    className="flex items-center gap-2"
+                  >
+                    <Search className="h-4 w-4" />
+                    Pattern Recognition Helper
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/mock-coding" className="flex items-center gap-2">
+                    <GraduationCap className="h-4 w-4" />
+                    Mock Coding Interview
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/design-quiz" className="flex items-center gap-2">
+                    <HelpCircle className="h-4 w-4" />
+                    System Design Quiz
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/architecture-explainer"
+                    className="flex items-center gap-2"
+                  >
+                    <GitBranch className="h-4 w-4" />
+                    Architecture Explainer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/concept-explainer"
+                    className="flex items-center gap-2"
+                  >
+                    <Lightbulb className="h-4 w-4" />
+                    Tech Concept Explainer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/code-converter"
+                    className="flex items-center gap-2"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                    Code Language Converter
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/query-optimizer"
+                    className="flex items-center gap-2"
+                  >
+                    <Database className="h-4 w-4" />
+                    Query Optimizer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/tech-history"
+                    className="flex items-center gap-2"
+                  >
+                    <History className="h-4 w-4" />
+                    View History
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
