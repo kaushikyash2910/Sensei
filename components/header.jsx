@@ -22,6 +22,11 @@ import {
   Target,
   MessageCircle,
   Linkedin,
+  Building2,
+  GitBranch,
+  Code2,
+  BookOpen,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
@@ -196,6 +201,64 @@ export default async function Header() {
                   <Link href="/tech-stack" className="flex items-center gap-2">
                     <Layers className="h-4 w-4" />
                     Tech Stack Recommender
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/company-research"
+                    className="flex items-center gap-2"
+                  >
+                    <Building2 className="h-4 w-4" />
+                    Company Research
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/referral-request"
+                    className="flex items-center gap-2"
+                  >
+                    <Users className="h-4 w-4" />
+                    Referral Request
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Tech & DSA Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="hidden md:flex items-center gap-2"
+                >
+                  <Code2 className="h-4 w-4" />
+                  <span>Tech & DSA</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuItem asChild>
+                  <Link href="/dsa-planner" className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    DSA Study Planner
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/system-design"
+                    className="flex items-center gap-2"
+                  >
+                    <GitBranch className="h-4 w-4" />
+                    System Design Explainer
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/coding-explainer"
+                    className="flex items-center gap-2"
+                  >
+                    <Code2 className="h-4 w-4" />
+                    Coding Challenge Explainer
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

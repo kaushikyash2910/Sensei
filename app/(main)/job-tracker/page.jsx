@@ -1,6 +1,8 @@
 import { getJobs } from "@/actions/job-tracker";
 import { KanbanBoard } from "./_components/kanban-board";
 import { AddJobDialog } from "./_components/add-job-dialog";
+import { SuccessTracker } from "./_components/success-tracker";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function JobTrackerPage() {
   const jobs = await getJobs();
@@ -11,13 +13,24 @@ export default async function JobTrackerPage() {
         <div>
           <h1 className="text-3xl font-bold">Job Tracker</h1>
           <p className="text-muted-foreground mt-1">
-            Track every application from applied to offer.
+            Track every application and analyze your success rate.
           </p>
         </div>
         <AddJobDialog />
       </div>
 
-      <KanbanBoard initialJobs={jobs} />
+      <Tabs defaultValue="kanban">
+        <TabsList className="mb-6">
+          <TabsTrigger value="kanban">📋 Kanban Board</TabsTrigger>
+          <TabsTrigger value="analytics">📊 Success Analytics</TabsTrigger>
+        </TabsList>
+        <TabsContent value="kanban">
+          <KanbanBoard initialJobs={jobs} />
+        </TabsContent>
+        <TabsContent value="analytics">
+          <SuccessTracker />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
