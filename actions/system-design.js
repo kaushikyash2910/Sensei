@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import Groq from "groq-sdk";
+import { saveToHistory } from "./tech-history";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -54,7 +55,13 @@ Respond ONLY with a valid JSON object, no markdown, no backticks:
   const text = response.choices[0]?.message?.content || "";
   try {
     const clean = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(clean);
+    const result = JSON.parse(clean);
+    await saveToHistory({
+      feature: "System Design",
+      inputSummary: `${topic} (${experienceLevel})`,
+      result,
+    });
+    return result;
   } catch {
     throw new Error("AI response parsing failed. Please try again.");
   }
