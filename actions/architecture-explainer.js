@@ -45,7 +45,8 @@ Respond ONLY with a valid JSON object, no markdown, no backticks:
   const firstBrace = text.indexOf("{");
   const lastBrace = text.lastIndexOf("}");
   const clean = text.substring(firstBrace, lastBrace + 1);
-  const result = JSON.parse(clean);
+  const sanitized = clean.replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Remove control characters
+  const result = JSON.parse(sanitized);
 
   await saveToHistory({
     feature: "Architecture Explainer",

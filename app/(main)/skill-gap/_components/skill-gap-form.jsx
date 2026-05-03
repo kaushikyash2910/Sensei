@@ -4,15 +4,16 @@ import { useState, useEffect } from "react";
 import { analyzeSkillGap } from "@/actions/skill-gap";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles, FileText, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { SkillGapResults } from "./skill-gap-results";
+
+const EXAMPLE_JD = `We are looking for a Senior Full Stack Engineer proficient in React, Node.js, TypeScript, PostgreSQL, and AWS. Experience with Docker, CI/CD pipelines, and system design is required. Knowledge of Redis and GraphQL is a plus.`;
 
 export function SkillGapForm() {
   const [jobDesc, setJobDesc] = useState("");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const STORAGE_KEY = "sensei_skill_gap";
 
   useEffect(() => {
@@ -48,48 +49,72 @@ export function SkillGapForm() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Paste the Job Description</label>
+      {/* Input Card */}
+      <div className="relative rounded-2xl border-2 border-dashed border-muted-foreground/20 hover:border-primary/40 transition-colors bg-muted/10 p-6">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+            <FileText className="h-4 w-4 text-primary" />
+          </div>
+          <label className="text-sm font-semibold">Paste the Job Description</label>
+          <button
+            onClick={() => setJobDesc(EXAMPLE_JD)}
+            className="ml-auto text-xs text-primary hover:underline"
+          >
+            Try example →
+          </button>
+        </div>
         <Textarea
-          placeholder="Paste the full job description here..."
+          placeholder="Paste the full job description here — requirements, skills, responsibilities..."
           value={jobDesc}
           onChange={(e) => setJobDesc(e.target.value)}
-          className="min-h-[200px]"
+          className="min-h-[200px] border-0 bg-transparent p-0 resize-none focus-visible:ring-0 text-sm"
         />
+        {jobDesc && (
+          <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+            {jobDesc.split(" ").filter(Boolean).length} words
+          </p>
+        )}
       </div>
 
-      <div className="flex gap-2">
-        <Button onClick={handleAnalyze} disabled={loading} className="flex-1">
+      {/* Buttons */}
+      <div className="flex gap-3">
+        <Button
+          onClick={handleAnalyze}
+          disabled={loading}
+          className="flex-1 h-11 text-sm font-semibold gap-2"
+        >
           {loading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Analyzing...
-            </>
+            <><Loader2 className="h-4 w-4 animate-spin" />Analyzing your profile...</>
           ) : (
-            "Analyze Skill Gap"
+            <><Sparkles className="h-4 w-4" />Analyze Skill Gap</>
           )}
         </Button>
         {results && (
           <Button
             variant="outline"
+            className="h-11 gap-2"
             onClick={() => {
               setResults(null);
               localStorage.removeItem(STORAGE_KEY);
             }}
           >
-            Clear
+            <RefreshCw className="h-4 w-4" />Clear
           </Button>
         )}
       </div>
-      
+
       {results && (
-  <>
-    <p className="text-xs text-muted-foreground text-center">
-      ✓ Showing your last saved result — click Analyze Skill Gap to refresh
-    </p>
-    <SkillGapResults results={results} />
-  </>
-)}
+        <>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 h-px bg-border" />
+            <p className="text-xs text-muted-foreground px-2">
+              ✓ Last saved result — click Analyze to refresh
+            </p>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+          <SkillGapResults results={results} />
+        </>
+      )}
     </div>
   );
 }

@@ -9,8 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Github, Sparkles } from "lucide-react";
+import { Loader2, Github, Sparkles, RefreshCw, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import { AnalyzerResults } from "./analyzer-results";
 
@@ -21,7 +20,6 @@ export function AnalyzerForm() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // GitHub repo fetching
   const [githubUrl, setGithubUrl] = useState("");
   const [repos, setRepos] = useState([]);
   const [selectedRepos, setSelectedRepos] = useState([]);
@@ -31,7 +29,6 @@ export function AnalyzerForm() {
 
   const STORAGE_KEY = "sensei_profile_analyzer";
 
-  // Load saved results on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -45,7 +42,6 @@ export function AnalyzerForm() {
     setProfileText(linkedinText);
   }, []);
 
-  // When tab switches load correct saved data
   useEffect(() => {
     if (profileType === "LinkedIn") {
       setProfileUrl(localStorage.getItem("sensei_linkedin_url") || "");
@@ -58,7 +54,6 @@ export function AnalyzerForm() {
     }
   }, [profileType]);
 
-  // Save URL
   useEffect(() => {
     if (profileUrl) {
       if (profileType === "LinkedIn") {
@@ -69,7 +64,6 @@ export function AnalyzerForm() {
     }
   }, [profileUrl, profileType]);
 
-  // Save text
   useEffect(() => {
     if (profileText) {
       if (profileType === "LinkedIn") {
@@ -80,7 +74,6 @@ export function AnalyzerForm() {
     }
   }, [profileText, profileType]);
 
-  // Save results
   useEffect(() => {
     if (results) {
       localStorage.setItem(
@@ -165,57 +158,85 @@ export function AnalyzerForm() {
   return (
     <div className="space-y-6">
       <Tabs value={profileType} onValueChange={(v) => setProfileType(v)}>
-        <TabsList className="w-full">
-          <TabsTrigger value="LinkedIn" className="flex-1">LinkedIn</TabsTrigger>
-          <TabsTrigger value="GitHub" className="flex-1">GitHub</TabsTrigger>
+        <TabsList className="w-full h-12 p-1 bg-muted/50 rounded-xl">
+          <TabsTrigger
+            value="LinkedIn"
+            className="flex-1 h-full rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center gap-2 font-medium"
+          >
+            <div className="w-4 h-4 rounded bg-blue-600 flex items-center justify-center">
+              <span className="text-white text-xs font-bold">in</span>
+            </div>
+            LinkedIn
+          </TabsTrigger>
+          <TabsTrigger
+            value="GitHub"
+            className="flex-1 h-full rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center gap-2 font-medium"
+          >
+            <Github className="h-4 w-4" />
+            GitHub
+          </TabsTrigger>
         </TabsList>
 
-        {/* ── LinkedIn Tab ── */}
-        <TabsContent value="LinkedIn" className="space-y-3 mt-4">
-          <Input
-            placeholder="Your LinkedIn profile URL (optional)"
-            value={profileUrl}
-            onChange={(e) => setProfileUrl(e.target.value)}
-          />
+        {/* LinkedIn Tab */}
+        <TabsContent value="LinkedIn" className="space-y-4 mt-4">
+          <div className="relative">
+            <Link2 className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Your LinkedIn profile URL (optional)"
+              value={profileUrl}
+              onChange={(e) => setProfileUrl(e.target.value)}
+              className="pl-9"
+            />
+          </div>
           {profileUrl && (
-            <p className="text-xs text-green-500">✓ LinkedIn URL saved</p>
+            <p className="text-xs text-emerald-500 flex items-center gap-1">
+              <span>✓</span> LinkedIn URL saved
+            </p>
           )}
-          <Textarea
-            placeholder="Paste your LinkedIn About section + Experience here..."
-            className="min-h-[200px]"
-            value={profileText}
-            onChange={(e) => setProfileText(e.target.value)}
-          />
+
+          <div className="relative rounded-2xl border-2 border-dashed border-muted-foreground/20 hover:border-primary/40 transition-colors bg-muted/10 p-5">
+            <Textarea
+              placeholder="Paste your LinkedIn About section + Experience here..."
+              className="min-h-[180px] border-0 bg-transparent p-0 resize-none focus-visible:ring-0 text-sm"
+              value={profileText}
+              onChange={(e) => setProfileText(e.target.value)}
+            />
+            {profileText && (
+              <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+                {profileText.split(" ").filter(Boolean).length} words pasted
+              </p>
+            )}
+          </div>
           {profileText && (
-            <p className="text-xs text-green-500">✓ LinkedIn profile text saved</p>
+            <p className="text-xs text-emerald-500 flex items-center gap-1">
+              <span>✓</span> LinkedIn profile text saved
+            </p>
           )}
           <p className="text-xs text-muted-foreground">
-            💡 Go to your LinkedIn profile → click "More" → "Save to PDF" or
-            copy-paste your About + Experience sections.
+            💡 Go to your LinkedIn profile → click "More" → "Save to PDF" or copy-paste your About + Experience sections.
           </p>
         </TabsContent>
 
-        {/* ── GitHub Tab ── */}
+        {/* GitHub Tab */}
         <TabsContent value="GitHub" className="space-y-4 mt-4">
-
-          {/* Step 1 — Enter GitHub URL + Fetch Repos */}
           <div className="space-y-2">
-            <p className="text-sm font-medium">Step 1 — Enter your GitHub URL</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Step 1 — Enter your GitHub URL
+            </p>
             <div className="flex gap-2">
-              <Input
-                placeholder="https://github.com/yourusername"
-                value={githubUrl}
-                onChange={(e) => {
-                  setGithubUrl(e.target.value);
-                  setProfileUrl(e.target.value);
-                }}
-                className="flex-1"
-              />
-              <Button
-                variant="outline"
-                onClick={handleFetchRepos}
-                disabled={fetchingRepos}
-              >
+              <div className="relative flex-1">
+                <Github className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="https://github.com/yourusername"
+                  value={githubUrl}
+                  onChange={(e) => {
+                    setGithubUrl(e.target.value);
+                    setProfileUrl(e.target.value);
+                  }}
+                  className="pl-9"
+                />
+              </div>
+              <Button variant="outline" onClick={handleFetchRepos} disabled={fetchingRepos}>
                 {fetchingRepos ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
@@ -224,26 +245,25 @@ export function AnalyzerForm() {
               </Button>
             </div>
             {profileUrl && (
-              <p className="text-xs text-green-500">✓ GitHub URL saved</p>
+              <p className="text-xs text-emerald-500">✓ GitHub URL saved</p>
             )}
           </div>
 
-          {/* Step 2 — Select Repos */}
           {repos.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm font-medium">
-                Step 2 — Select repos to include ({selectedRepos.length} selected)
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Step 2 — Select repos ({selectedRepos.length} selected)
               </p>
-              <div className="border rounded-xl p-3 space-y-2 max-h-[280px] overflow-y-auto">
+              <div className="rounded-xl border bg-muted/10 divide-y max-h-[260px] overflow-y-auto">
                 {repos.map((repo) => (
                   <div
                     key={repo.name}
                     onClick={() => toggleRepo(repo.name)}
-                    className={`flex items-start gap-3 p-2 rounded-lg cursor-pointer transition-all
-                      ${selectedRepos.includes(repo.name)
-                        ? "bg-primary/10 border border-primary/30"
-                        : "hover:bg-muted"
-                      }`}
+                    className={`flex items-start gap-3 p-3 cursor-pointer transition-all ${
+                      selectedRepos.includes(repo.name)
+                        ? "bg-primary/5 border-l-2 border-l-primary"
+                        : "hover:bg-muted/50"
+                    }`}
                   >
                     <Checkbox
                       checked={selectedRepos.includes(repo.name)}
@@ -253,96 +273,98 @@ export function AnalyzerForm() {
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm">{repo.name}</p>
                       {repo.description && (
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">
                           {repo.description}
                         </p>
                       )}
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         {repo.language && (
-                          <Badge variant="secondary" className="text-xs">
-                            {repo.language}
-                          </Badge>
+                          <Badge variant="secondary" className="text-xs h-5">{repo.language}</Badge>
                         )}
                         {repo.stars > 0 && (
-                          <span className="text-xs text-muted-foreground">
-                            ⭐ {repo.stars}
-                          </span>
+                          <span className="text-xs text-muted-foreground">⭐ {repo.stars}</span>
                         )}
-                        {repo.topics.slice(0, 2).map((t) => (
-                          <Badge key={t} variant="outline" className="text-xs">
-                            {t}
-                          </Badge>
-                        ))}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Step 3 — Generate Description */}
               <Button
                 onClick={handleGenerateDescription}
                 disabled={generatingDesc || selectedRepos.length === 0}
                 variant="outline"
-                className="w-full"
+                className="w-full gap-2"
               >
                 {generatingDesc ? (
-                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Description...</>
+                  <><Loader2 className="h-4 w-4 animate-spin" />Generating Description...</>
                 ) : (
-                  <><Sparkles className="mr-2 h-4 w-4" />Generate Profile Description from Selected Repos</>
+                  <><Sparkles className="h-4 w-4" />Generate Profile Description from {selectedRepos.length} Repos</>
                 )}
               </Button>
             </div>
           )}
 
-          {/* Step 3/4 — Profile Text (auto-filled or manual) */}
           <div className="space-y-2">
-            <p className="text-sm font-medium">
-              {repos.length > 0 ? "Step 3 — Review & edit the generated description" : "Or paste manually"}
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {repos.length > 0 ? "Step 3 — Review & edit" : "Or paste manually"}
             </p>
-            <Textarea
-              placeholder="Paste your GitHub bio, top repos with descriptions, README highlights... or use the AI generator above."
-              className="min-h-[180px]"
-              value={profileText}
-              onChange={(e) => setProfileText(e.target.value)}
-            />
+            <div className="relative rounded-2xl border-2 border-dashed border-muted-foreground/20 hover:border-primary/40 transition-colors bg-muted/10 p-5">
+              <Textarea
+                placeholder="Paste your GitHub bio, top repos with descriptions, README highlights..."
+                className="min-h-[150px] border-0 bg-transparent p-0 resize-none focus-visible:ring-0 text-sm"
+                value={profileText}
+                onChange={(e) => setProfileText(e.target.value)}
+              />
+              {profileText && (
+                <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+                  {profileText.split(" ").filter(Boolean).length} words
+                </p>
+              )}
+            </div>
             {profileText && (
-              <p className="text-xs text-green-500">✓ GitHub profile text saved</p>
+              <p className="text-xs text-emerald-500">✓ GitHub profile text saved</p>
             )}
           </div>
-
-          <p className="text-xs text-muted-foreground">
-            💡 Use the Fetch Repos button to auto-generate your profile description from your GitHub repositories.
-          </p>
         </TabsContent>
       </Tabs>
 
-      <div className="flex gap-2">
-        <Button onClick={handleAnalyze} disabled={loading} className="flex-1">
+      {/* Analyze Button */}
+      <div className="flex gap-3">
+        <Button
+          onClick={handleAnalyze}
+          disabled={loading}
+          className="flex-1 h-11 gap-2 font-semibold"
+        >
           {loading ? (
-            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Analyzing Profile...</>
+            <><Loader2 className="h-4 w-4 animate-spin" />Analyzing {profileType} Profile...</>
           ) : (
-            "Analyze My Profile"
+            <><Sparkles className="h-4 w-4" />Analyze My {profileType} Profile</>
           )}
         </Button>
         {results && (
           <Button
             variant="outline"
+            className="h-11 gap-2"
             onClick={() => {
               setResults(null);
               localStorage.removeItem(STORAGE_KEY);
             }}
           >
-            Clear
+            <RefreshCw className="h-4 w-4" />Clear
           </Button>
         )}
       </div>
 
       {results && (
         <>
-          <p className="text-xs text-muted-foreground text-center">
-            ✓ Showing your last saved result — click Analyze to refresh
-          </p>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 h-px bg-border" />
+            <p className="text-xs text-muted-foreground px-2">
+              ✓ Last saved result — click Analyze to refresh
+            </p>
+            <div className="flex-1 h-px bg-border" />
+          </div>
           <AnalyzerResults results={results} profileType={profileType} />
         </>
       )}
