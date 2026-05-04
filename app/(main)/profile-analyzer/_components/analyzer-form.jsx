@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Github, Sparkles, RefreshCw, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import { AnalyzerResults } from "./analyzer-results";
+import { ProfileExtras } from "./profile-extras";
 
 export function AnalyzerForm() {
   const [profileType, setProfileType] = useState("LinkedIn");
@@ -357,17 +358,20 @@ export function AnalyzerForm() {
       </div>
 
       {results && (
-        <>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-px bg-border" />
-            <p className="text-xs text-muted-foreground px-2">
-              ✓ Last saved result — click Analyze to refresh
-            </p>
-            <div className="flex-1 h-px bg-border" />
-          </div>
-          <AnalyzerResults results={results} profileType={profileType} />
-        </>
-      )}
+  <>
+    <div className="flex items-center gap-2">
+      <div className="flex-1 h-px bg-border" />
+      <p className="text-xs text-muted-foreground px-2">✓ Last saved result — click Analyze to refresh</p>
+      <div className="flex-1 h-px bg-border" />
+    </div>
+    <AnalyzerResults results={results} profileType={profileType} />
+    <ProfileExtras
+      profileType={profileType}
+      profileText={profileText}
+      currentScore={results.overallScore}
+    />
+  </>
+)}
     </div>
   );
 }

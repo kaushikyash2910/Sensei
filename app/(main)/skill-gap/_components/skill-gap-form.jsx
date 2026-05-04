@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Sparkles, FileText, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { SkillGapResults } from "./skill-gap-results";
+import { SkillGapExtras } from "./skill-gap-extras";
 
 const EXAMPLE_JD = `We are looking for a Senior Full Stack Engineer proficient in React, Node.js, TypeScript, PostgreSQL, and AWS. Experience with Docker, CI/CD pipelines, and system design is required. Knowledge of Redis and GraphQL is a plus.`;
 
@@ -55,7 +56,9 @@ export function SkillGapForm() {
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
             <FileText className="h-4 w-4 text-primary" />
           </div>
-          <label className="text-sm font-semibold">Paste the Job Description</label>
+          <label className="text-sm font-semibold">
+            Paste the Job Description
+          </label>
           <button
             onClick={() => setJobDesc(EXAMPLE_JD)}
             className="ml-auto text-xs text-primary hover:underline"
@@ -75,7 +78,6 @@ export function SkillGapForm() {
           </p>
         )}
       </div>
-
       {/* Buttons */}
       <div className="flex gap-3">
         <Button
@@ -84,9 +86,15 @@ export function SkillGapForm() {
           className="flex-1 h-11 text-sm font-semibold gap-2"
         >
           {loading ? (
-            <><Loader2 className="h-4 w-4 animate-spin" />Analyzing your profile...</>
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Analyzing your profile...
+            </>
           ) : (
-            <><Sparkles className="h-4 w-4" />Analyze Skill Gap</>
+            <>
+              <Sparkles className="h-4 w-4" />
+              Analyze Skill Gap
+            </>
           )}
         </Button>
         {results && (
@@ -98,11 +106,12 @@ export function SkillGapForm() {
               localStorage.removeItem(STORAGE_KEY);
             }}
           >
-            <RefreshCw className="h-4 w-4" />Clear
+            <RefreshCw className="h-4 w-4" />
+            Clear
           </Button>
         )}
       </div>
-
+      
       {results && (
         <>
           <div className="flex items-center gap-2">
@@ -113,6 +122,7 @@ export function SkillGapForm() {
             <div className="flex-1 h-px bg-border" />
           </div>
           <SkillGapResults results={results} />
+          <SkillGapExtras results={{ ...results, jobDesc }} />
         </>
       )}
     </div>
