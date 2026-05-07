@@ -34,7 +34,8 @@ export async function saveResume(content) {
         content,
       },
     });
-
+    
+    await incrementResumes();
     revalidatePath("/resume");
     return resume;
   } catch (error) {
@@ -43,7 +44,7 @@ export async function saveResume(content) {
   }
 }
   
-await incrementResumes();
+
 export async function getResume() {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
